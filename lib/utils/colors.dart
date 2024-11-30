@@ -25,4 +25,5 @@ class AppColors {
 
   static const Color blackColor = Colors.black;
   static const Color whiteColor = Colors.white;
+  static const Color boder1color = Color(0xff5BF4CF);
 }
