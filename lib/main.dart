@@ -1,17 +1,18 @@
 import 'package:chateo/Screen/bottm_bar/provider/bottom_bar_provider.dart';
+import 'package:chateo/Screen/chat_screen/provider/chat_text_field_provider.dart';
 import 'package:chateo/Screen/splach/splach_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // global object for accessing device Screen Size
 late Size mq;
-
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (context) => BottomBarProvider(),
-      )
+      ),
+      ChangeNotifierProvider(create: (context) => ChatTextFieldProvider())
     ],
     child: const MyApp(),
   ));

@@ -2,6 +2,7 @@ class AppImage {
   static const String logoImage = "assets/image/logo.png";
   static const String onbordlogo = "assets/image/onboarding logo.png";
   static const String googleImage = "assets/image/google.png";
+  static const String profileimage = "assets/image/profice_pic.png";
 
   // svg icon
   static const String usericon = "assets/icon/user.svg";
@@ -16,4 +17,7 @@ class AppImage {
   static const String statusselectedicon = 'assets/icon/status_seleced.svg';
   static const String groupselectedicon = 'assets/icon/group_selected.svg';
   static const String callselectedicon = 'assets/icon/call_selected.svg';
+  static const String searchicon = 'assets/icon/search_icon.svg';
+  static const String menuicon = 'assets/icon/menu_icon.svg';
+  static const String messageicon = 'assets/icon/messsage _svg.svg';
 }

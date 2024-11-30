@@ -63,7 +63,7 @@ class HomeBottomBar extends StatelessWidget {
         ),
       ),
       body: screens[provider.currentIndex],
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.backgroundColor,
     );
   }
 
