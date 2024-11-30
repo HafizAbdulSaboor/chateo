@@ -11,7 +11,8 @@ class AppColors {
   static const Color barcontainerColor = Color(0xff375FFF);
   static const Color checkColor = Color(0xffCBCBCB);
   static const Color borderColor = Color(0xff25252566);
-
+  static const Color backgroundColor = Color(0xffCDE1FD);
   static const Color blackColor = Colors.black;
   static const Color whiteColor = Colors.white;
+  static const Color bodercolor = Color(0xff5BF4CF);
 }
