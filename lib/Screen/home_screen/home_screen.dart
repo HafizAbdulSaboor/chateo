@@ -1,4 +1,5 @@
 import 'package:chateo/Screen/home_screen/widget/list_of_user.dart';
+import 'package:chateo/Screen/settings_screen/settings_screen.dart';
 
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
@@ -100,8 +101,9 @@ class HomeScreen extends StatelessWidget {
                     PopupMenuItem(
                         child: GestureDetector(
                       onTap: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => const SettingScreen()));
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SettingsScreen()));
                       },
                       child: Container(
                         // width: 193,
