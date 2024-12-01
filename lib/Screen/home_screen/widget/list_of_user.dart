@@ -14,10 +14,6 @@ class ListOfUser extends StatelessWidget {
     'Abdullah',
     'Saboor',
     'Maaz',
-    'Awais',
-    'Rafey',
-    'Abuzer',
-    'Shabaz',
   ];
   @override
   Widget build(BuildContext context) {
