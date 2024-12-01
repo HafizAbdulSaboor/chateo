@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:67107507129:android:1f1470ef44cafeaad60468",
         "android_client_info": {
-          "package_name": "com.chateo.app"
+          "package_name": "com.example.chateo"
         }
       },
       "oauth_client": [],

@@ -22,6 +22,7 @@ class AppColors {
   static const Color chatcontainerColor = Color(0xff20A090);
   static const Color chattimeColor = Color(0xff797C7B);
   static const Color reciveContainer = Color(0xffF2F7FB);
+  static const Color floatingcontainerColor = Color(0xff222648);
 
   static const Color blackColor = Colors.black;
   static const Color whiteColor = Colors.white;

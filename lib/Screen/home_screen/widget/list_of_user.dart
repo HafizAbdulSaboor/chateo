@@ -31,8 +31,10 @@ class ListOfUser extends StatelessWidget {
           padding: const EdgeInsets.only(top: 30),
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ChatScreen()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ChatScreen()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ChatScreen()));
             },
             child: Row(
               children: [
