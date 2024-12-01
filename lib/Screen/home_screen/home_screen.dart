@@ -152,7 +152,7 @@ class HomeScreen extends StatelessWidget {
               border: Border.all(color: AppColors.whiteColor),
               borderRadius: const BorderRadius.all(Radius.circular(25)),
               // border: Border.all(width: 2, color: AppColors.whitecolor),
-              color: AppColors.barcontainerColor),
+              color: AppColors.floatingcontainerColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

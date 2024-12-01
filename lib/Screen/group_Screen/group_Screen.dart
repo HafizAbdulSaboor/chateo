@@ -23,12 +23,12 @@ class GroupScreen extends StatelessWidget {
       'English (device language)'
     ];
     List<Icon> icons = [
-      Icon(Icons.key),
-      Icon(Icons.lock),
-      Icon(Icons.chat),
-      Icon(Icons.notifications),
-      Icon(Icons.cloud),
-      Icon(Icons.public)
+      const Icon(Icons.key),
+      const Icon(Icons.lock),
+      const Icon(Icons.chat),
+      const Icon(Icons.notifications),
+      const Icon(Icons.cloud),
+      const Icon(Icons.public)
     ];
 
     return Scaffold(
@@ -38,28 +38,29 @@ class GroupScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         primary: true,
         backgroundColor: Colors.white,
-        leading: Icon(Icons.arrow_back, color: Colors.black),
-        title: Text('Settings',
+        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        title: const Text('Settings',
             style: TextStyle(
                 fontFamily: 'mulish',
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
                 color: AppColors.blackColor)),
-        actions: [
-          const Icon(
+        actions: const [
+          Icon(
             Icons.search,
             color: AppColors.blackColor,
           ),
-          const SizedBox(
+          SizedBox(
             width: 15,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(right: 19.0),
             child: Icon(Icons.more_vert, color: AppColors.blackColor),
           )
         ],
       ),
-      body: SingleChildScrollView( // Make the content scrollable
+      body: SingleChildScrollView(
+        // Make the content scrollable
         child: Column(
           children: [
             Padding(
@@ -97,24 +98,24 @@ class GroupScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            Text('Hassaan',
+            const SizedBox(height: 10),
+            const Text('Hassaan',
                 style: TextStyle(
                     fontFamily: 'mulish',
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: AppColors.blackColor)),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               width: MediaQuery.of(context).size.width * 0.5,
               height: 35,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   color: Colors.blueGrey),
-              child: Align(
+              child: const Align(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
                   child: Text('Do not disturb!',
                       style: TextStyle(
                           fontFamily: 'mulish',
@@ -124,11 +125,11 @@ class GroupScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.backgroundColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40),
@@ -137,28 +138,29 @@ class GroupScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
                 child: ListView.builder(
                   shrinkWrap: true, // Allows ListView to wrap its content
-                  physics: NeverScrollableScrollPhysics(), // Prevent scrolling
+                  physics:
+                      const NeverScrollableScrollPhysics(), // Prevent scrolling
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       leading: Container(
                         width: 60,
                         height: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: Colors.white),
                         child: icons[index],
                       ),
                       title: Text(title[index],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'mulish',
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Colors.black)),
                       subtitle: Text(subTitle[index],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'mulish',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
