@@ -2,6 +2,7 @@ import 'package:chateo/Screen/bottm_bar/provider/bottom_bar_provider.dart';
 import 'package:chateo/Screen/chat_screen/provider/chat_text_field_provider.dart';
 import 'package:chateo/Screen/siginscreen/provider/signup_provider.dart';
 import 'package:chateo/Screen/splach/splach_Screen.dart';
+import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/provider/bool_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => RegisterProvider()),
       ChangeNotifierProvider(create: (context) => Authpro()),
       ChangeNotifierProvider(create: (context) => ProviderBool()),
+      ChangeNotifierProvider(create: (context) => ChatProvider()),
     ],
     child: const MyApp(),
   ));
