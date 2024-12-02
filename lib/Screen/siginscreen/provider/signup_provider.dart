@@ -45,6 +45,8 @@ class RegisterProvider with ChangeNotifier {
       String result =
           await AuthServices.signin(email.text, password.text, context);
       if (result == 'success') {
+        email.clear();
+        password.clear();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const HomeBottomBar()),
             (route) => false);
