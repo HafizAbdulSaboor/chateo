@@ -20,4 +20,5 @@ class AppImage {
   static const String searchicon = 'assets/icon/search_icon.svg';
   static const String menuicon = 'assets/icon/menu_icon.svg';
   static const String messageicon = 'assets/icon/messsage _svg.svg';
+  static const String logouticon = 'assets/icon/logout_icon.svg';
 }

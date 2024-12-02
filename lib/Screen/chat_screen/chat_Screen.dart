@@ -102,7 +102,7 @@ class ChatScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
+      body: const Column(
         children: [
           Expanded(
             child: Column(
@@ -111,7 +111,7 @@ class ChatScreen extends StatelessWidget {
               ],
             ),
           ),
-          const ChatTextForm(),
+          ChatTextForm(),
         ],
       ),
     );

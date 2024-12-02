@@ -1,4 +1,6 @@
+import 'package:chateo/Screen/bottm_bar/home_bottom_bar.dart';
 import 'package:chateo/Screen/onboarding/onboarding_screen.dart';
+import 'package:chateo/apis/auth_apis.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,15 @@ class _SplachScreenState extends State<SplachScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const OnboardingScreen()));
+      // navigate Home screen
+      if (Apis.auth.currentUser != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const HomeBottomBar()),
+            (route) => false);
+      } else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const OnboardingScreen()));
+      }
     });
   }
 
