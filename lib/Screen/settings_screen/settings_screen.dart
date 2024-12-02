@@ -2,6 +2,9 @@ import 'package:chateo/Screen/log_out/log_out.dart';
 import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
 
+import '../../apis/auth_apis.dart';
+import '../loginscreen/login_screen.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -13,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
       'Chats',
       'Notifications',
       'Data and Storage',
-      'Language'
+      'Language',
     ];
     List<String> subTitle = [
       'Number, email, security',
@@ -50,17 +53,17 @@ class SettingsScreen extends StatelessWidget {
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
                 color: AppColors.blackColor)),
-        actions: const [
-          Icon(
-            Icons.search,
-            color: AppColors.blackColor,
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 19.0),
-            child: Icon(Icons.more_vert, color: AppColors.blackColor),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Apis.auth.signOut().then((value) => Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(
+                  builder: (context) => const LoginScreen())));
+            },
+            child: Padding(
+              padding: EdgeInsets.only(right: 19.0),
+              child: Icon(Icons.logout, color: AppColors.blackColor),
+            ),
           )
         ],
       ),
@@ -151,14 +154,6 @@ class SettingsScreen extends StatelessWidget {
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      onTap: () {
-                        if (title[index] == 'Notifications') {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const LogOutScreen()),
-                          );
-                        }
-                      },
                       leading: Container(
                         width: 60,
                         height: 60,
