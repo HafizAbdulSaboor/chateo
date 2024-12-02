@@ -10,6 +10,7 @@ import 'package:chateo/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../provider/signup_provider.dart';
 
@@ -99,6 +100,10 @@ class _LoginTextFormFieldState extends State<LoginTextFormField> {
                 log('provider.email.text');
                 log('provider.password.text');
                 log('provider.fullName.text');
+                VxToast.show(context,
+                    msg: "Please fill in all fields",
+                    bgColor: Colors.red,
+                    textColor: Colors.white);
               }
             },
             isPass: true,

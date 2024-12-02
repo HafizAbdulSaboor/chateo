@@ -9,48 +9,18 @@ class Authpro extends ChangeNotifier {
   UserModel get user => _user;
 
   getUserData(
-      UserModel user,
-      ) {
+    UserModel user,
+  ) {
     _user = user;
     notifyListeners();
   }
+
   getSelfInfo() async {
     var data = await AuthServices.firestore
-        .collection("user")
+        .collection("users")
         .doc(AuthServices.auth.currentUser?.uid)
         .get();
-    UserModel user = UserModel.fromJson({
-      ...data.data()!,
-      'userId': AuthServices.auth.currentUser?.uid,
-    });
+    UserModel user = UserModel.fromJson(data.data()!);
     getUserData(user);
   }
-
-  // Future<void> updateUserData(
-  //     String fullname,
-  //     //
-  //     String phoneNumber) async {
-  //   try {
-  //     // Update Firestore
-  //     await Apis.firestore
-  //         .collection('users')
-  //         .doc(user.userId) // Use _user.userId
-  //         .update({
-  //       'fullname': fullname,
-  //       // 'email': email,
-  //
-  //     });
-
-      // Update local user state
-      // _user = user.copyWith(
-      //     fullname: fullname,
-      //     //  email: email,);
-      // );
-
-      // Notify listeners to update UI
-  //     notifyListeners();
-  //   } catch (e) {
-  //     log("Error updating user data: $e");
-  //   }
-  // }
 }

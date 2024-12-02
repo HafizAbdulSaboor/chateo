@@ -48,10 +48,10 @@ class AuthServices {
       return await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        var data =
-            await firestore.collection("user").doc(value.user?.uid).get();
-        UserModel user = UserModel.fromJson(data.data()!);
-        provider.getUserData(user);
+        // var data =
+        //     await firestore.collection("user").doc(value.user?.uid).get();
+        // UserModel user = UserModel.fromJson(data.data()!);
+        provider.getSelfInfo();
         return "success";
       });
     } catch (e) {

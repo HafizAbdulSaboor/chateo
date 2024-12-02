@@ -3,6 +3,7 @@ import 'package:chateo/Screen/settings_screen/settings_screen.dart';
 
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

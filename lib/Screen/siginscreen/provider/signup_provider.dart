@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/provider/bool_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ class RegisterProvider with ChangeNotifier {
         fullName.text,
       );
       if (result == 'register') {
-        // Provider.of<ProviderBool>(context, listen: false).setValue(false);
+        
+        Provider.of<ProviderBool>(context, listen: false).setValue(false);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
             (route) => false);
@@ -45,8 +47,7 @@ class RegisterProvider with ChangeNotifier {
       String result =
           await AuthServices.signin(email.text, password.text, context);
       if (result == 'success') {
-        email.clear();
-        password.clear();
+        // await provider.getSelfInfo();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const HomeBottomBar()),
             (route) => false);
@@ -54,6 +55,8 @@ class RegisterProvider with ChangeNotifier {
             msg: 'Signup Successful',
             bgColor: Colors.green,
             textColor: Colors.white);
+        email.clear();
+        password.clear();
       }
     } catch (e) {
       log("login error : $e");
