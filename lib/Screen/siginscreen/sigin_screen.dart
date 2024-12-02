@@ -7,6 +7,7 @@ import 'package:chateo/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SiginScreen extends StatelessWidget {
+
   const SiginScreen({super.key});
 
   @override

@@ -9,15 +9,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class HomeBottomBar extends StatelessWidget {
+import '../../auth/provider/auth_provider.dart';
+
+class HomeBottomBar extends StatefulWidget {
   const HomeBottomBar({super.key});
 
+  @override
+  State<HomeBottomBar> createState() => _HomeBottomBarState();
+}
+
+class _HomeBottomBarState extends State<HomeBottomBar> {
   final List<Widget> screens = const [
     HomeScreen(),
     StatusScreen(),
     GroupScreen(),
     CallScreen(),
   ];
+
+  @override
+  void initState() {
+    Provider.of<Authpro>(context, listen: false).getSelfInfo();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

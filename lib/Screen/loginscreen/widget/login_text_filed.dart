@@ -1,16 +1,26 @@
+import 'dart:developer';
+
 import 'package:chateo/Screen/bottm_bar/home_bottom_bar.dart';
 import 'package:chateo/Screen/loginscreen/widget/forget_row.dart';
+import 'package:chateo/Screen/siginscreen/provider/signup_provider.dart';
 import 'package:chateo/utils/images.dart';
 import 'package:chateo/widgets/custom%20_container.dart';
 import 'package:chateo/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-class LoginTextFiled extends StatelessWidget {
+class LoginTextFiled extends StatefulWidget {
   const LoginTextFiled({super.key});
 
   @override
+  State<LoginTextFiled> createState() => _LoginTextFiledState();
+}
+
+class _LoginTextFiledState extends State<LoginTextFiled> {
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<RegisterProvider>(context, listen: false);
     return Column(
       children: [
         Padding(
@@ -23,6 +33,7 @@ class LoginTextFiled extends StatelessWidget {
               ],
             ),
             text: 'Valid email',
+            controller: provider.email,
           ),
         ),
         const SizedBox(
@@ -39,6 +50,7 @@ class LoginTextFiled extends StatelessWidget {
               ],
             ),
             text: 'Strong Password',
+            controller: provider.password,
           ),
         ),
         const SizedBox(
@@ -58,14 +70,14 @@ class LoginTextFiled extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: CustomContainer(
-              ontap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => const HomeBottomBar()),
-                  (route) {
-                    return false;
-                  },
-                );
+              ontap: () async {
+                if (provider.email.text.isNotEmpty &&
+                    provider.password.text.isNotEmpty) {
+                  await provider.sigins(context);
+                } else {
+                  log('provider.email.text');
+                  log('provider.password.text');
+                }
               },
               isPass: true,
               text: 'Login'),
