@@ -1,6 +1,8 @@
 import 'package:chateo/Screen/log_out/log_out.dart';
+import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 import '../../apis/auth_apis.dart';
 import '../loginscreen/login_screen.dart';
@@ -34,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
       const Icon(Icons.cloud),
       const Icon(Icons.public)
     ];
-
+    var provider = Provider.of<Authpro>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,9 +60,9 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Apis.auth.signOut().then((value) => Navigator.of(context)
                   .pushReplacement(MaterialPageRoute(
-                  builder: (context) => const LoginScreen())));
+                      builder: (context) => const LoginScreen())));
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 19.0),
               child: Icon(Icons.logout, color: AppColors.blackColor),
             ),
@@ -107,7 +109,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const Text('Hassaan',
+            Text(provider.user.fullname,
                 style: TextStyle(
                     fontFamily: 'mulish',
                     fontSize: 18,
