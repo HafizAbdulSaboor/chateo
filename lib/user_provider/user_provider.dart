@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:chateo/models/user_model.dart';
+import 'package:chateo/models/user_model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';

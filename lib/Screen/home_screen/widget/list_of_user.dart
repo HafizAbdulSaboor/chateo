@@ -4,7 +4,7 @@ import 'package:chateo/Screen/chat_screen/chat_Screen.dart';
 import 'package:chateo/Screen/chat_screen/widget/chat_text_form.dart';
 import 'package:chateo/apis/auth_apis.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
-import 'package:chateo/models/user_model.dart';
+import 'package:chateo/models/user_model/user_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class ListOfUser extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: list.length,
-                itemBuilder: (BuildContext, int index) {
+                itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: GestureDetector(
