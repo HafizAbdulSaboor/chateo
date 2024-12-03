@@ -22,7 +22,7 @@ class ListOfUser extends StatelessWidget {
 
     return StreamBuilder(
         stream: Apis.firestore
-            .collection("users")
+            .collection("user")
             .where(
               "userId",
               isNotEqualTo: provider.user.userId,
