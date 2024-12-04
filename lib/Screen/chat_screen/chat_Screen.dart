@@ -5,7 +5,8 @@ import 'package:chateo/utils/images.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  final String chatId;
+  const ChatScreen({super.key, required this.chatId});
 
   @override
   Widget build(BuildContext context) {
@@ -102,16 +103,20 @@ class ChatScreen extends StatelessWidget {
           )
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
           Expanded(
             child: Column(
               children: [
-                ChatContainer(),
+                ChatContainer(
+                  chatId: chatId,
+                ),
               ],
             ),
           ),
-          ChatTextForm(),
+          ChatTextForm(
+            chatId: chatId,
+          ),
         ],
       ),
     );

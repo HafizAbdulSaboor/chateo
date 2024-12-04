@@ -32,36 +32,4 @@ class Authpro extends ChangeNotifier {
       log("[Error] An unexpected error occurred: $e");
     }
   }
-
-  // getSelfInfo() async {
-  //   try {
-  //     var currentUser = AuthServices.auth.currentUser;
-  //     if (currentUser == null) {
-  //       log("[Error] User not authenticated.");
-  //       return;
-  //     }
-  //     var currentUserId = currentUser.uid;
-  //     log("[log] Current User ID: $currentUserId");
-
-  //     var data = await AuthServices.firestore
-  //         .collection("user")
-  //         .doc(currentUserId)
-  //         .get();
-
-  //     if (!data.exists || data.data() == null) {
-  //       log("[Error] No data found for the user with ID: $currentUserId");
-  //       return;
-  //     }
-
-  //     UserModel user = UserModel.fromJson(data.data()!);
-  //     getUserData(user);
-  //     log("[log] Fetched User Data: ${user.toJson()}");
-  //   } catch (e) {
-  //     if (e is FirebaseException && e.code == 'permission-denied') {
-  //       log("[Error] Firestore permission denied. Check Firestore security rules.");
-  //     } else {
-  //       log("[Error] An unexpected error occurred: $e");
-  //     }
-  //   }
-  // }
 }
