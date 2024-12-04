@@ -51,7 +51,9 @@ class ListOfUser extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ChatScreen()));
+                            builder: (context) => const ChatScreen(
+                                  chatId: '',
+                                )));
                       },
                       child: Row(
                         children: [

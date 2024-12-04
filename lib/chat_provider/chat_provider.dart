@@ -1,80 +1,81 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class ChatProvider with ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+import 'package:chateo/models/message_model/message_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
+class ChatProvider extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot> getChats(String userId) {
-    return _firestore
-        .collection("chats")
-        .where('user', arrayContains: userId)
-        .snapshots();
-  }
+  List<MessageModel> _messages = [];
+  List<MessageModel> get messages => _messages;
+  // message fetch
 
-  Stream<QuerySnapshot> searchUsers(String query) {
-    return _firestore
-        .collection("users")
-        .where('email', isGreaterThanOrEqualTo: query)
-        .where('email', isLessThanOrEqualTo: query + '\uf8ff')
-        .snapshots();
-  }
+  // Future<void> fetchMessages(String chatId) async {
+  //   try {
+  //     final querySnapshot = await _firestore
+  //         .collection('messages')
+  //         .where('chatId', isEqualTo: chatId)
+  //         .orderBy('sent', descending: false)
+  //         .get();
 
-  Future<void> sendMessage(
-    String chatId,
-    String message,
-    String receiverId,
-  ) async {
-    final currentUser = _auth.currentUser;
-    if (currentUser != null) {
-      await _firestore
-          .collection('chats')
-          .doc(chatId)
+  //     _messages = querySnapshot.docs
+  //         .map((doc) => MessageModel.fromJson(doc.data()))
+  //         .toList();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     log("Error fetch message: $e");
+  //   }
+  // }
+  Future<void> fetchMessages(String chatId) async {
+    log('message not be fetch');
+    try {
+      final querySnapshot = await _firestore
           .collection('messages')
-          .add({
-        'senderId': currentUser.uid,
-        'receiverId': receiverId,
-        'messageBody': message,
-        'timeStamp': FieldValue.serverTimestamp()
-      });
-
-      await _firestore.collection('chats').doc(chatId).set({
-        'users': [currentUser.uid, receiverId],
-        'lastMessage': message,
-        'timeStamp': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-    }
-  }
-
-  Future<String?> getChatRoom(String receiverId) async {
-    final currentUser = _auth.currentUser;
-    if (currentUser != null) {
-      final chatQuery = await _firestore
-          .collection('chats')
-          .where('users', arrayContains: currentUser.uid)
+          .where('fromId', isEqualTo: chatId)
+          .where('toId', isEqualTo: chatId)
+          .orderBy('sent', descending: false)
           .get();
-      final chats = chatQuery.docs
-          .where((chat) => chat['users'].contains(receiverId))
-          .toList();
 
-      if(chats.isNotEmpty){
-        return chats.first.id;
-      }
+      _messages = querySnapshot.docs
+          .map((doc) => MessageModel.fromJson(doc.data()))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      log("Error fetching messages: $e");
     }
-    return null;
   }
 
-  Future<String> createChatRoom(String receiverId) async{
-    final currentUser=_auth.currentUser;
-    if(currentUser!=null){
-      final chatRoom=await _firestore.collection('chats').add({
-        'users': [currentUser.uid, receiverId],
-        'lastMessage': '',
-        'timeStamp': FieldValue.serverTimestamp(),
+  Future<void> sendMessage(MessageModel message) async {
+    try {
+      final docRef = FirebaseFirestore.instance.collection('messages').doc();
+      await docRef.set({
+        'fromId': message.fromId,
+        'toId': message.toId,
+        'msg': message.msg,
+        'sent': message.sent,
+        'read': message.read,
+        'messageType': message.messageType.toString(),
       });
-      return chatRoom.id;
+      notifyListeners();
+    } catch (e) {
+      log('Error sending message: $e');
     }
-    throw Exception('Current User is Null');
+  }
+
+  // Future<void> sendMessage(MessageModel message) async {
+  //   try {
+  //     final docRef = _firestore.collection('messages').doc();
+  //     final newMessage = message.copyWith(id: docRef.id);
+  //     await docRef.set(newMessage.toJson());
+  //     _messages.add(newMessage);
+  //     notifyListeners();
+  //   } catch (e) {
+  //     log('Error sending message: $e');
+  //   }
+  // }
+
+  String generateMessageId() {
+    return FirebaseFirestore.instance.collection('messages').doc().id;
   }
 }

@@ -224,7 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 10),
             Text(provider.user.fullname,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'mulish',
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
