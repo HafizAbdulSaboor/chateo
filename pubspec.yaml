@@ -47,6 +47,7 @@ dependencies:
   velocity_x: ^4.2.1
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
+  image_picker: ^1.1.2
  
 
 dev_dependencies:

@@ -1,14 +1,109 @@
+import 'dart:io';
+
 import 'package:chateo/Screen/log_out/log_out.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
 import '../../apis/auth_apis.dart';
 import '../loginscreen/login_screen.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  
+  File? _selectedImage;
+  Uint8List? profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProfileImage();
+  }
+
+  Future<void> fetchProfileImage() async {
+    final image = await fetchProfileImageFromFirestore();
+    setState(() {
+      profileImage = image;
+    });
+  }
+
+  Future<void> pickAndStoreProfileImage() async {
+    final imageBytes = await pickImage();
+    if (imageBytes != null) {
+      await storeImageInFirestore(imageBytes);
+      fetchProfileImage();
+    }
+  }
+
+  Future<Uint8List?> pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final imageBytes = await pickedFile.readAsBytes();
+      return imageBytes;
+    }
+    return null;
+  }
+
+  Future<void> storeImageInFirestore(Uint8List imageBytes) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("User not authenticated");
+      return;
+    }
+
+    try {
+      String base64Image = base64Encode(imageBytes);
+      final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
+      await userDocRef.update({'pic': base64Image});
+      print("Image stored successfully as Base64 string in Firestore.");
+    } catch (e) {
+      print("Error storing image in Firestore: $e");
+    }
+  }
+
+  Future<Uint8List?> fetchProfileImageFromFirestore() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("User not authenticated");
+      return null;
+    }
+
+    try {
+      final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
+      final docSnapshot = await userDocRef.get();
+
+      if (docSnapshot.exists) {
+        final picBase64 = docSnapshot['pic'] as String?;
+        if (picBase64 != null && picBase64.isNotEmpty) {
+          Uint8List imageBytes = base64Decode(picBase64);
+          return imageBytes;
+        } else {
+          print("Image data is empty or null");
+        }
+      }
+    } catch (e) {
+      print("Error fetching image from Firestore: $e");
+    }
+    return null;
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +132,7 @@ class SettingsScreen extends StatelessWidget {
       const Icon(Icons.public)
     ];
     var provider = Provider.of<Authpro>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -83,25 +179,43 @@ class SettingsScreen extends StatelessWidget {
                     height: 80,
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     child: ClipOval(
-                      child: Image.asset('assets/image/story4.jpg',
-                          fit: BoxFit.cover),
+                      child: profileImage != null
+                          ? Image.memory(
+                        profileImage!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/image/story4.jpg', // Default placeholder
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        'assets/image/story4.jpg', // Default placeholder
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.camera_alt,
-                            size: 14,
-                            color: Colors.white,
+                      child: GestureDetector(
+                        onTap: (){
+                          pickAndStoreProfileImage();
+                        },
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: 14,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       )),
@@ -179,7 +293,7 @@ class SettingsScreen extends StatelessWidget {
                   },
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
