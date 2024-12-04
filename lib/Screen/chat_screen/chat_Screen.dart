@@ -1,19 +1,22 @@
 import 'package:chateo/Screen/chat_screen/widget/chat_container.dart';
 import 'package:chateo/Screen/chat_screen/widget/chat_text_form.dart';
+import 'package:chateo/main.dart';
+import 'package:chateo/models/user_model/user_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   final String chatId;
-  const ChatScreen({super.key, required this.chatId});
+  final UserModel user;
+  const ChatScreen({super.key, required this.chatId, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        titleSpacing: 5,
+        titleSpacing: 1,
         toolbarHeight: 80,
         // leading: Icon(Icons.arrow_back),
         title: Row(
@@ -36,13 +39,14 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
             ]),
-            const SizedBox(width: 10),
-            const Column(
+            const SizedBox(width: 5),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'saad Zafar dost',
-                  style: TextStyle(fontSize: 15),
+                  maxLines: 1,
+                  user.fullname,
+                  style: TextStyle(fontSize: 14),
                 ),
                 Text(
                   'active now',
@@ -53,53 +57,49 @@ class ChatScreen extends StatelessWidget {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: const Icon(
-                      Icons.videocam_outlined,
-                      color: Colors.white,
-                    )),
-                const SizedBox(
-                  width: 15,
-                ),
-                Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: const Icon(
-                      Icons.phone,
-                      color: Colors.white,
-                    )),
-                const SizedBox(
-                  width: 15,
-                ),
-                PopupMenuButton(
-                    itemBuilder: (BuildContext context) {
-                      return <PopupMenuEntry>[
-                        const PopupMenuItem(child: Text('View contact')),
-                        const PopupMenuItem(
-                            child: Text('Media, link and docs')),
-                        const PopupMenuItem(child: Text('search')),
-                        const PopupMenuItem(child: Text('Mute notifications')),
-                        const PopupMenuItem(child: Text('Wallpaper')),
-                      ];
-                    },
-                    child: const Icon(
-                      Icons.more_vert,
+          Row(
+            children: [
+              Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
                       color: Colors.black,
-                    ))
-              ],
-            ),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Icon(
+                    Icons.videocam_outlined,
+                    color: Colors.white,
+                  )),
+              const SizedBox(
+                width: 15,
+              ),
+              Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                  )),
+              const SizedBox(
+                width: 15,
+              ),
+              PopupMenuButton(
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry>[
+                      const PopupMenuItem(child: Text('View contact')),
+                      const PopupMenuItem(child: Text('Media, link and docs')),
+                      const PopupMenuItem(child: Text('search')),
+                      const PopupMenuItem(child: Text('Mute notifications')),
+                      const PopupMenuItem(child: Text('Wallpaper')),
+                    ];
+                  },
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                  ))
+            ],
           )
         ],
       ),

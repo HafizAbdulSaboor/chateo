@@ -47,6 +47,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   Future<void> sendMessage(MessageModel message) async {
+    log('message send');
     try {
       final docRef = FirebaseFirestore.instance.collection('messages').doc();
       await docRef.set({

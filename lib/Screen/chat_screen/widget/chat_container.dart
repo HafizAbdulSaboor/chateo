@@ -15,13 +15,12 @@ class ChatContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
     final authProvider = Provider.of<Authpro>(context, listen: false);
-    final chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('messages')
           .where('chatId', isEqualTo: chatId)
-          .orderBy('sent', descending: false)
+          .orderBy('sent', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,8 +42,8 @@ class ChatContainer extends StatelessWidget {
             final isSentByMe = message.fromId == authProvider.user.userId;
 
             return isSentByMe
-                ? _sendMessage(mq, message)
-                : _reciveMessage(mq, message);
+                ? _reciveMessage(mq, message)
+                : _sendMessage(mq, message);
           },
         );
       },
