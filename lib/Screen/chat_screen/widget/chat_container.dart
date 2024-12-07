@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
+import 'package:chateo/main.dart';
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -15,46 +16,21 @@ class ChatContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
-    final authProvider = Provider.of<Authpro>(context, listen: false);
+    final chatProvider = Provider.of<ChatProvider>(context);
+    final messages = chatProvider.messages;
+    final authProvider = Provider.of<Authpro>(context);
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('messages')
-          .where('chatId', isEqualTo: chatId)
-          .orderBy('sent', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('No messages yet.'));
-        }
-
-        final messages = snapshot.data!.docs;
-        log("snapshot.data!.docs.length");
-        return ListView.builder(
-          itemCount: messages.length,
-          padding: EdgeInsets.only(bottom: mq.height * 0.1),
-          itemBuilder: (context, index) {
-            final messageData = messages[index].data() as Map<String, dynamic>;
-            final message = MessageModel.fromJson(messageData);
-            final isSentByMe = message.fromId == authProvider.user.userId;
-            // return IntrinsicWidth(
-            //   child: Container(
-            //     height: 30,
-            //     color: Colors.yellow,
-            //     child: Text(message.msg),
-            //   ),
-            // );
-            return isSentByMe
-                ? _reciveMessage(mq, message)
-                : _sendMessage(mq, message);
-          },
-        );
-      },
+    return Expanded(
+      child: ListView.builder(
+        itemCount: messages.length,
+        itemBuilder: (context, index) {
+          final message = messages[index];
+          final isSentByMe = message.fromId == authProvider.user.userId;
+          return isSentByMe
+              ? _reciveMessage(mq, message)
+              : _sendMessage(mq, message);
+        },
+      ),
     );
   }
 

@@ -53,7 +53,7 @@ class _ChatTextFormState extends State<ChatTextForm> {
           messageType: MessageType.text,
           chatId: chatId);
 
-      chatProvider.sendMessage(message);
+      chatProvider.sendMessage(message, context);
       _controller.clear();
       inputFieldProvider.updateFocus(false);
     }
