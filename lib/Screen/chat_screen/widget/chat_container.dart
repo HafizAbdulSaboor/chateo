@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/models/message_model/message_model.dart';
@@ -32,7 +34,7 @@ class ChatContainer extends StatelessWidget {
         }
 
         final messages = snapshot.data!.docs;
-        print(snapshot.data!.docs.length);
+        log("snapshot.data!.docs.length");
         return ListView.builder(
           itemCount: messages.length,
           padding: EdgeInsets.only(bottom: mq.height * 0.1),
@@ -40,16 +42,16 @@ class ChatContainer extends StatelessWidget {
             final messageData = messages[index].data() as Map<String, dynamic>;
             final message = MessageModel.fromJson(messageData);
             final isSentByMe = message.fromId == authProvider.user.userId;
-            return IntrinsicWidth(
-              child: Container(
-                height: 30,
-                color: Colors.yellow,
-                child: Text(message.msg),
-              ),
-            );
-            // return isSentByMe
-            //     ? _reciveMessage(mq, message)
-            //     : _sendMessage(mq, message);
+            // return IntrinsicWidth(
+            //   child: Container(
+            //     height: 30,
+            //     color: Colors.yellow,
+            //     child: Text(message.msg),
+            //   ),
+            // );
+            return isSentByMe
+                ? _reciveMessage(mq, message)
+                : _sendMessage(mq, message);
           },
         );
       },

@@ -50,7 +50,11 @@ class ChatProvider extends ChangeNotifier {
   Future<void> sendMessage(MessageModel message) async {
     log('message send');
     try {
-      final docRef = FirebaseFirestore.instance.collection('messages').doc();
+      final docRef = FirebaseFirestore.instance
+          .collection('messages')
+          .doc()
+          .collection('chatroom')
+          .doc();
       await docRef.set({
         'fromId': message.fromId,
         'toId': message.toId,
@@ -64,18 +68,6 @@ class ChatProvider extends ChangeNotifier {
       log('Error sending message: $e');
     }
   }
-
-  // Future<void> sendMessage(MessageModel message) async {
-  //   try {
-  //     final docRef = _firestore.collection('messages').doc();
-  //     final newMessage = message.copyWith(id: docRef.id);
-  //     await docRef.set(newMessage.toJson());
-  //     _messages.add(newMessage);
-  //     notifyListeners();
-  //   } catch (e) {
-  //     log('Error sending message: $e');
-  //   }
-  // }
 
   String generateMessageId() {
     return FirebaseFirestore.instance.collection('messages').doc().id;

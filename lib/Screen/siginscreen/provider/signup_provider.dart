@@ -22,7 +22,6 @@ class RegisterProvider with ChangeNotifier {
         fullName.text,
       );
       if (result == 'register') {
-        
         Provider.of<ProviderBool>(context, listen: false).setValue(false);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -31,6 +30,9 @@ class RegisterProvider with ChangeNotifier {
             msg: 'Signup Successful',
             bgColor: Colors.green,
             textColor: Colors.white);
+        fullName.clear();
+        email.clear();
+        password.clear();
       }
     } catch (e) {
       log("signup error : $e");
