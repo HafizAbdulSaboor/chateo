@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class ChatProvider extends ChangeNotifier {
@@ -32,8 +33,8 @@ class ChatProvider extends ChangeNotifier {
     try {
       final querySnapshot = await _firestore
           .collection('messages')
-          .where('fromId', isEqualTo: chatId)
-          .where('toId', isEqualTo: chatId)
+          .where('fromId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .where('toId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
           .orderBy('sent', descending: false)
           .get();
 

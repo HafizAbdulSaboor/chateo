@@ -2,26 +2,40 @@ import 'package:chateo/utils/colors.dart';
 import 'package:chateo/widgets/stories_avatar.dart';
 import 'package:flutter/material.dart';
 
-class StatusScreen extends StatelessWidget {
+class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
 
   @override
+  State<StatusScreen> createState() => _StatusScreenState();
+}
+
+class _StatusScreenState extends State<StatusScreen> {
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precache images here
+    for (String imagePath in imgUrls) {
+      precacheImage(AssetImage(imagePath), context);
+    }
+  }
+  List<String> imgUrls = [
+    'assets/image/story1.jpg',
+    'assets/image/story2.jpg',
+    'assets/image/story3.jpg',
+    'assets/image/story4.jpg',
+    'assets/image/story5.jpg',
+  ];
+  List<String> name = ['Hassan', 'Ali', 'Sana', 'Hamza', 'Faiz'];
+  List<String> time = [
+    '1:49 pm',
+    '12:36 pm',
+    '11:00 am',
+    '9:59 am',
+    '7:32 am'
+  ];
+  @override
   Widget build(BuildContext context) {
-    List<String> imgUrls = [
-      'assets/image/story1.jpg',
-      'assets/image/story2.jpg',
-      'assets/image/story3.jpg',
-      'assets/image/story4.jpg',
-      'assets/image/story5.jpg',
-    ];
-    List<String> name = ['Hassaan', 'Ali', 'Sana', 'Hamza', 'Faiz'];
-    List<String> time = [
-      '1:49 pm',
-      '12:36 pm',
-      '11:00 am',
-      '9:59 am',
-      '7:32 am'
-    ];
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(

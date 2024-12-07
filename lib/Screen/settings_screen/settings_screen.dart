@@ -1,5 +1,5 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:chateo/Screen/log_out/log_out.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,24 +62,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> storeImageInFirestore(Uint8List imageBytes) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      print("User not authenticated");
+      log("User not authenticated");
       return;
     }
-
     try {
       String base64Image = base64Encode(imageBytes);
       final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
       await userDocRef.update({'pic': base64Image});
-      print("Image stored successfully as Base64 string in Firestore.");
+      log("Image stored successfully as Base64 string in Firestore.");
     } catch (e) {
-      print("Error storing image in Firestore: $e");
+      log("Error storing image in Firestore: $e");
     }
   }
 
   Future<Uint8List?> fetchProfileImageFromFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      print("User not authenticated");
+      log("User not authenticated");
       return null;
     }
 
@@ -93,11 +92,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Uint8List imageBytes = base64Decode(picBase64);
           return imageBytes;
         } else {
-          print("Image data is empty or null");
+          log("Image data is empty or null");
         }
       }
     } catch (e) {
-      print("Error fetching image from Firestore: $e");
+      log("Error fetching image from Firestore: $e");
     }
     return null;
   }
