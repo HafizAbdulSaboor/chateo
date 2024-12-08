@@ -27,8 +27,8 @@ class ChatContainer extends StatelessWidget {
           final message = messages[index];
           final isSentByMe = message.fromId == authProvider.user.userId;
           return isSentByMe
-              ? _reciveMessage(mq, message)
-              : _sendMessage(mq, message);
+              ? _sendMessage(mq, message)
+              : _reciveMessage(mq, message);
         },
       ),
     );

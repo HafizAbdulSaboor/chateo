@@ -36,9 +36,14 @@ class ChatProvider extends ChangeNotifier {
   }
 
   Future<void> sendMessage(MessageModel message, BuildContext context) async {
+    log('Message details: fromId=${message.fromId}, toId=${message.toId}, msg=${message.msg}');
     log('message send');
     try {
       final pro = Provider.of<Authpro>(context, listen: false);
+      if (message.fromId == null || message.toId == null) {
+        log('Error: fromId or toId is null');
+        return;
+      }
       final docRef = FirebaseFirestore.instance
           .collection('messages')
           .doc(pro.user.userId)

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chateo/Screen/chat_screen/provider/chat_text_field_provider.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
@@ -36,7 +38,7 @@ class _ChatTextFormState extends State<ChatTextForm> {
 
       final currentUserId = authProvider.user?.userId;
       if (currentUserId == null) {
-        debugPrint('User ID is null. Cannot send message.');
+        log('User ID is null. Cannot send message.');
         return;
       }
       final chatId = currentUserId.compareTo(widget.chatId) < 0

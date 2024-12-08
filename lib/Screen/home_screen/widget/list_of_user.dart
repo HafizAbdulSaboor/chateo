@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:chateo/Screen/chat_screen/chat_Screen.dart';
-import 'package:chateo/Screen/chat_screen/widget/chat_text_form.dart';
 import 'package:chateo/apis/auth_apis.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
+import 'package:chateo/models/message_model/message_model.dart';
 import 'package:chateo/models/user_model/user_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
@@ -17,6 +17,7 @@ class ListOfUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Authpro>(context, listen: false);
+
     List<UserModel> list = [];
 
     return StreamBuilder(
@@ -49,11 +50,28 @@ class ListOfUser extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 30),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        final currentUserId = provider.user.userId;
+                        final recipientId = list[index].userId;
+
+                        if (currentUserId == null || recipientId == null) {
+                          log('Error: User ID or recipient ID is null.');
+                          return;
+                        }
+
+                        final chatId = currentUserId.compareTo(recipientId) < 0
+                            ? "$currentUserId$recipientId"
+                            : "$recipientId$currentUserId";
+
+                        log('Generated chatId: $chatId');
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (context) => ChatScreen(
-                                  user: list[index],
-                                  chatId: '',
-                                )));
+                              user: list[index],
+                              chatId: chatId,
+                            ),
+                          ),
+                        );
                       },
                       child: Row(
                         children: [
