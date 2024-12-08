@@ -30,9 +30,6 @@ class RegisterProvider with ChangeNotifier {
             msg: 'Signup Successful',
             bgColor: Colors.green,
             textColor: Colors.white);
-        fullName.clear();
-        email.clear();
-        password.clear();
       }
     } catch (e) {
       log("signup error : $e");
