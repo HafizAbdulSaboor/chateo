@@ -14,27 +14,7 @@ class ChatProvider extends ChangeNotifier {
   List<MessageModel> _messages = [];
   List<MessageModel> get messages => _messages;
 
-  Future<void> fetchMessages(String chatId) async {
-    log('Fetching messages for chatId: $chatId');
-    try {
-      final querySnapshot = await _firestore
-          .collection('messages')
-          .where('chatId', isEqualTo: chatId) // Filter by chat ID
-          .orderBy('sent', descending: false) // Order by timestamp
-          .get();
-
-      _messages = querySnapshot.docs
-          .map((doc) =>
-              MessageModel.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-
-      log('Fetched ${_messages.length} messages');
-      notifyListeners(); // Notify listeners to update UI
-    } catch (e) {
-      log("Error fetching messages: $e");
-    }
-  }
-
+//  send messages function
   Future<void> sendMessage(MessageModel message, BuildContext context) async {
     log('Message details: fromId=${message.fromId}, toId=${message.toId}, msg=${message.msg}');
     log('message send');
@@ -56,6 +36,7 @@ class ChatProvider extends ChangeNotifier {
         'sent': message.sent,
         'read': message.read,
         'messageType': message.messageType.toString(),
+      
       });
       notifyListeners();
     } catch (e) {
@@ -63,7 +44,31 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  String generateMessageId() {
-    return FirebaseFirestore.instance.collection('messages').doc().id;
+  //  rec msg function
+  Future<void> fetchMessages(String chatId) async {
+    log('Fetching messages for chatId: $chatId');
+    try {
+      final querySnapshot = await _firestore
+          .collection('messages')
+          .where('chatId', isEqualTo: chatId)
+          .get();
+
+      _messages = querySnapshot.docs
+          .map((doc) =>
+              MessageModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+// Sort locally after fetching
+      _messages.sort((a, b) => a.sent.compareTo(b.sent));
+
+      log('Fetched ${_messages.length} messages');
+      notifyListeners(); // Notify listeners to update UI
+    } catch (e) {
+      log("Error fetching messages: $e");
+    }
   }
+
+  // String generateMessageId() {
+  //   return FirebaseFirestore.instance.collection('messages').doc().id;
+  // }
 }

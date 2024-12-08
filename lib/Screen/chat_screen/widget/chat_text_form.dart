@@ -50,7 +50,7 @@ class _ChatTextFormState extends State<ChatTextForm> {
           fromId: currentUserId,
           toId: widget.chatId,
           msg: _controller.text.trim(),
-          read: false,
+          read: true,
           sent: DateTime.now(),
           messageType: MessageType.text,
           chatId: chatId);

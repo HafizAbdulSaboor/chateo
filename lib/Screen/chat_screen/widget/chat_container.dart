@@ -20,19 +20,27 @@ class ChatContainer extends StatelessWidget {
     final messages = chatProvider.messages;
     final authProvider = Provider.of<Authpro>(context);
 
+    // Ensure the provider fetches messages for the current chat
+    chatProvider.fetchMessages(chatId);
+
     return Expanded(
-      child: ListView.builder(
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final message = messages[index];
-          final isSentByMe = message.fromId == authProvider.user.userId;
-          return isSentByMe
-              ? _sendMessage(mq, message)
-              : _reciveMessage(mq, message);
-        },
-      ),
+      child: messages.isEmpty
+          ? const Center(child: Text('No messages yet'))
+          : ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final message = messages[index];
+                final isSentByMe = message.fromId == authProvider.user.userId;
+                return isSentByMe
+                    ? _sendMessage(
+                        mq, message) // Replace mq with MediaQuery if necessary
+                    : _reciveMessage(mq, message);
+              },
+            ),
     );
   }
+  //  ? _sendMessage(mq, message)
+  //             : _reciveMessage(mq, message);
 
   // Widget for sent messages
   Widget _sendMessage(Size mq, MessageModel message) {
