@@ -12,10 +12,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'auth/provider/auth_provider.dart';
 
 // global object for accessing device Screen Size
-late Size mq;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(

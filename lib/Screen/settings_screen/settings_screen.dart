@@ -9,6 +9,7 @@ import 'package:chateo/utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../apis/auth_apis.dart';
 import '../loginscreen/login_screen.dart';
 import 'dart:convert';
@@ -182,18 +183,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ? Image.memory(
                         profileImage!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            'assets/image/story4.jpg', // Default placeholder
-                            fit: BoxFit.cover,
-                          );
-                        },
                       )
-                          : Image.asset(
-                        'assets/image/story4.jpg', // Default placeholder
-                        fit: BoxFit.cover,
-                      ),
+                          : Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              shape: BoxShape.circle,
+                            ),
+                        child: Center(child: Icon(Icons.person,size: 25,)),
+                          ),
                     ),
+
                   ),
                   Positioned(
                       bottom: 0,

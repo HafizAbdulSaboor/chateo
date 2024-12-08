@@ -24,20 +24,15 @@ class ChatProvider extends ChangeNotifier {
         log('Error: fromId or toId is null');
         return;
       }
+      MessageModel messageModel = message.copyWith(
+        id: DateTime.now().millisecondsSinceEpoch.toString()
+      );
       final docRef = FirebaseFirestore.instance
+          .collection('chats')
+          .doc(message.chatId)
           .collection('messages')
-          .doc(pro.user.userId)
-          .collection('chatroom')
-          .doc(message.chatId);
-      await docRef.set({
-        'fromId': message.fromId,
-        'toId': message.toId,
-        'msg': message.msg,
-        'sent': message.sent,
-        'read': message.read,
-        'messageType': message.messageType.toString(),
-      
-      });
+          .doc(messageModel.id);
+      await docRef.set(messageModel.toJson());
       notifyListeners();
     } catch (e) {
       log('Error sending message: $e');
@@ -45,30 +40,53 @@ class ChatProvider extends ChangeNotifier {
   }
 
   //  rec msg function
-  Future<void> fetchMessages(String chatId) async {
-    log('Fetching messages for chatId: $chatId');
+  Future<void> fetchMessages(String chatId, BuildContext context) async {
+    final authProvider = Provider.of<Authpro>(context, listen: false);
+    final currentUserId = authProvider.user?.userId;
+
+    if (currentUserId == null) {
+      log('User ID is null. Cannot send message.');
+      return;
+    }
+
+    final roomId = currentUserId.compareTo(chatId) < 0
+        ? "${currentUserId}_$chatId"
+        : "${chatId}_$currentUserId";
+
     try {
       final querySnapshot = await _firestore
-          .collection('messages')
-          .where('chatId', isEqualTo: chatId)
+          .collection('chats')
+          .doc(roomId)
+          .collection("messages")
           .get();
 
       _messages = querySnapshot.docs
-          .map((doc) =>
-              MessageModel.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) {
+        var data = doc.data();
+        var sent = data['sent'];
+
+        // If sent is a Timestamp, convert it to DateTime
+        if (sent is Timestamp) {
+          sent = sent.toDate(); // Convert Timestamp to DateTime
+        }
+
+        return MessageModel.fromJson(data);
+      })
           .toList();
 
-// Sort locally after fetching
+      // Sort locally after fetching
       _messages.sort((a, b) => a.sent.compareTo(b.sent));
 
       log('Fetched ${_messages.length} messages');
-      notifyListeners(); // Notify listeners to update UI
+      notifyListeners();
     } catch (e) {
       log("Error fetching messages: $e");
     }
   }
 
-  // String generateMessageId() {
+
+
+// String generateMessageId() {
   //   return FirebaseFirestore.instance.collection('messages').doc().id;
   // }
 }

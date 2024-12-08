@@ -5,6 +5,7 @@ import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:chateo/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,38 +28,43 @@ class _ChatTextFormState extends State<ChatTextForm> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final inputFieldProvider = Provider.of<ChatTextFieldProvider>(context);
+  void _sendMessage() {
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
     final authProvider = Provider.of<Authpro>(context, listen: false);
 
-    void _sendMessage() {
-      if (_controller.text.trim().isEmpty) return;
+    if (_controller.text.trim().isEmpty) return;
 
-      final currentUserId = authProvider.user?.userId;
-      if (currentUserId == null) {
-        log('User ID is null. Cannot send message.');
-        return;
-      }
-      final chatId = currentUserId.compareTo(widget.chatId) < 0
-          ? "$currentUserId${widget.chatId}"
-          : "${widget.chatId}_$currentUserId";
-
-      final message = MessageModel(
-          id: '',
-          fromId: currentUserId,
-          toId: widget.chatId,
-          msg: _controller.text.trim(),
-          read: true,
-          sent: DateTime.now(),
-          messageType: MessageType.text,
-          chatId: chatId);
-
-      chatProvider.sendMessage(message, context);
-      _controller.clear();
-      inputFieldProvider.updateFocus(false);
+    final currentUserId = authProvider.user?.userId;
+    if (currentUserId == null) {
+      log('User ID is null. Cannot send message.');
+      return;
     }
+    final chatId = currentUserId.compareTo(widget.chatId) < 0
+        ? "${currentUserId}_${widget.chatId}"
+        : "${widget.chatId}_$currentUserId";
+
+    final message = MessageModel(
+      id: '',
+      fromId: currentUserId,
+      toId: widget.chatId,
+      msg: _controller.text.trim(),
+      read: true,
+      sent: DateTime.now().toString(),
+      messageType: MessageType.text.name,
+      chatId: chatId,
+    );
+
+    chatProvider.sendMessage(message, context);
+    _controller.clear();
+    // Provider.of<ChatTextFieldProvider>(context).updateFocus(false);
+    Provider.of<ChatTextFieldProvider>(context, listen: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final inputFieldProvider = Provider.of<ChatTextFieldProvider>(context);
+
+
 
     return Container(
       height: 80,

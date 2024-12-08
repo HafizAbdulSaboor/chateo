@@ -10,6 +10,7 @@ import 'package:chateo/utils/images.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ListOfUser extends StatefulWidget {
   const ListOfUser({super.key});
@@ -76,15 +77,10 @@ class _ListOfUserState extends State<ListOfUser> {
                         return;
                       }
 
-                      final chatId = currentUserId.compareTo(recipientId) < 0
-                          ? "$currentUserId$recipientId"
-                          : "$recipientId$currentUserId";
-
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ChatScreen(
                             user: list[index],
-                            chatId: chatId,
                           ),
                         ),
                       );
@@ -104,31 +100,49 @@ class _ListOfUserState extends State<ListOfUser> {
                             color: AppColors.whiteColor,
                           ),
                           child: FutureBuilder<Uint8List?>(
-                            future: fetchProfileImageFromFirestore(
-                                list[index].userId),
+                            future: fetchProfileImageFromFirestore(list[index].userId),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: ClipOval(
+                                    child: Container(
+                                      width: 60,
+                                      height: 60,
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
                                 );
                               } else if (snapshot.hasData) {
                                 return ClipOval(
                                   child: Image.memory(
                                     snapshot.data!,
                                     fit: BoxFit.cover,
+                                    width: 60, // Adjust size as needed
+                                    height: 60,
                                   ),
                                 );
                               } else {
                                 return ClipOval(
-                                  child: Image.asset(
-                                    AppImage.profileimage,
-                                    fit: BoxFit.fill,
+                                  child: Container(
+                                    width: 60, // Adjust size as needed
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.person, // Use a placeholder icon instead of an image
+                                      color: Colors.grey.shade700,
+                                      size: 30, // Adjust icon size
+                                    ),
                                   ),
                                 );
                               }
                             },
                           ),
+
                         ),
                         const SizedBox(width: 15),
                         Expanded(

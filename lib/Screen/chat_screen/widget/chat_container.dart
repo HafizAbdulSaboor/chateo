@@ -21,7 +21,7 @@ class ChatContainer extends StatelessWidget {
     final authProvider = Provider.of<Authpro>(context);
 
     // Ensure the provider fetches messages for the current chat
-    chatProvider.fetchMessages(chatId);
+    chatProvider.fetchMessages(chatId,context);
 
     return Expanded(
       child: messages.isEmpty
@@ -33,8 +33,8 @@ class ChatContainer extends StatelessWidget {
                 final isSentByMe = message.fromId == authProvider.user.userId;
                 return isSentByMe
                     ? _sendMessage(
-                        mq, message) // Replace mq with MediaQuery if necessary
-                    : _reciveMessage(mq, message);
+                        MediaQuery.of(context).size, message) // Replace mq with MediaQuery if necessary
+                    : _reciveMessage( MediaQuery.of(context).size, message);
               },
             ),
     );
@@ -75,7 +75,7 @@ class ChatContainer extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            _formatTimestamp(message.sent as Timestamp),
+            message.sent,
             style: const TextStyle(
               fontFamily: 'hind',
               fontSize: 9,
@@ -121,7 +121,7 @@ class ChatContainer extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            _formatTimestamp(message.sent as Timestamp),
+            message.sent,
             style: const TextStyle(
               fontFamily: 'hind',
               fontSize: 9,

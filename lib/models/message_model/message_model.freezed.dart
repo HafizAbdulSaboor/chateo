@@ -25,8 +25,8 @@ mixin _$MessageModel {
   String get toId => throw _privateConstructorUsedError;
   String get msg => throw _privateConstructorUsedError;
   bool get read => throw _privateConstructorUsedError;
-  DateTime get sent => throw _privateConstructorUsedError;
-  MessageType get messageType => throw _privateConstructorUsedError;
+  String get sent => throw _privateConstructorUsedError;
+  String get messageType => throw _privateConstructorUsedError;
   String get chatId => throw _privateConstructorUsedError;
 
   /// Serializes this MessageModel to a JSON map.
@@ -51,8 +51,8 @@ abstract class $MessageModelCopyWith<$Res> {
       String toId,
       String msg,
       bool read,
-      DateTime sent,
-      MessageType messageType,
+      String sent,
+      String messageType,
       String chatId});
 }
 
@@ -104,11 +104,11 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
       sent: null == sent
           ? _value.sent
           : sent // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       messageType: null == messageType
           ? _value.messageType
           : messageType // ignore: cast_nullable_to_non_nullable
-              as MessageType,
+              as String,
       chatId: null == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
@@ -131,8 +131,8 @@ abstract class _$$MessageModelImplCopyWith<$Res>
       String toId,
       String msg,
       bool read,
-      DateTime sent,
-      MessageType messageType,
+      String sent,
+      String messageType,
       String chatId});
 }
 
@@ -182,11 +182,11 @@ class __$$MessageModelImplCopyWithImpl<$Res>
       sent: null == sent
           ? _value.sent
           : sent // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       messageType: null == messageType
           ? _value.messageType
           : messageType // ignore: cast_nullable_to_non_nullable
-              as MessageType,
+              as String,
       chatId: null == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
@@ -222,9 +222,9 @@ class _$MessageModelImpl implements _MessageModel {
   @override
   final bool read;
   @override
-  final DateTime sent;
+  final String sent;
   @override
-  final MessageType messageType;
+  final String messageType;
   @override
   final String chatId;
 
@@ -277,8 +277,8 @@ abstract class _MessageModel implements MessageModel {
       required final String toId,
       required final String msg,
       required final bool read,
-      required final DateTime sent,
-      required final MessageType messageType,
+      required final String sent,
+      required final String messageType,
       required final String chatId}) = _$MessageModelImpl;
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -295,9 +295,9 @@ abstract class _MessageModel implements MessageModel {
   @override
   bool get read;
   @override
-  DateTime get sent;
+  String get sent;
   @override
-  MessageType get messageType;
+  String get messageType;
   @override
   String get chatId;
 

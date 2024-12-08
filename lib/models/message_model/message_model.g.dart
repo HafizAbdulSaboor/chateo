@@ -13,8 +13,8 @@ _$MessageModelImpl _$$MessageModelImplFromJson(Map<String, dynamic> json) =>
       toId: json['toId'] as String,
       msg: json['msg'] as String,
       read: json['read'] as bool,
-      sent: DateTime.parse(json['sent'] as String),
-      messageType: $enumDecode(_$MessageTypeEnumMap, json['messageType']),
+      sent: json['sent'] as String,
+      messageType: json['messageType'] as String,
       chatId: json['chatId'] as String,
     );
 
@@ -25,13 +25,7 @@ Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
       'toId': instance.toId,
       'msg': instance.msg,
       'read': instance.read,
-      'sent': instance.sent.toIso8601String(),
-      'messageType': _$MessageTypeEnumMap[instance.messageType]!,
+      'sent': instance.sent,
+      'messageType': instance.messageType,
       'chatId': instance.chatId,
     };
-
-const _$MessageTypeEnumMap = {
-  MessageType.text: 'text',
-  MessageType.image: 'image',
-  MessageType.video: 'video',
-};

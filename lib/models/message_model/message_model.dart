@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'date_time_converter.dart';
 
 part 'message_model.freezed.dart';
 part 'message_model.g.dart';
@@ -13,8 +16,8 @@ class MessageModel with _$MessageModel {
     required String toId,
     required String msg,
     required bool read,
-    required DateTime sent,
-    required MessageType messageType,
+    required String sent,
+    required String messageType,
     required String chatId,
   }) = _MessageModel;
 

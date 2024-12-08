@@ -7,12 +7,12 @@ import 'package:chateo/utils/colors.dart';
 import 'package:chateo/utils/images.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String chatId;
   final UserModel user;
 
-  const ChatScreen({super.key, required this.chatId, required this.user});
+  const ChatScreen({super.key, required this.user});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -57,13 +57,39 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Stack(
               children: [
+                // CircleAvatar(
+                //   backgroundImage: profileImage != null
+                //       ? MemoryImage(profileImage!)
+                //       : const AssetImage(AppImage.profileimage)
+                //   as ImageProvider,
+                //   maxRadius: 20,
+                // ),
                 CircleAvatar(
-                  backgroundImage: profileImage != null
-                      ? MemoryImage(profileImage!)
-                      : const AssetImage(AppImage.profileimage)
-                  as ImageProvider,
+                  backgroundColor: Colors.transparent,
                   maxRadius: 20,
+                  child: profileImage != null
+                      ? ClipOval(
+                    child: Image.memory(
+                      profileImage!,
+                      fit: BoxFit.cover,
+                      width: 40,
+                      height: 40,
+                    ),
+                  )
+                      : Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 40, // Adjust size as needed
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
                 ),
+
                 Positioned(
                   top: 30,
                   left: 33,
@@ -125,9 +151,9 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ChatContainer(chatId: widget.chatId),
+            child: ChatContainer(chatId:  widget.user.userId),
           ),
-          ChatTextForm(chatId: widget.chatId),
+          ChatTextForm(chatId: widget.user.userId),
         ],
       ),
     );
