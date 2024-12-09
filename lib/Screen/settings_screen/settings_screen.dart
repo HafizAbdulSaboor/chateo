@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:chateo/Screen/log_out/log_out.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,12 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'dart:typed_data';
-import 'package:image_picker/image_picker.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../apis/auth_apis.dart';
+import '../edit_profile/edit_profile_screen.dart';
 import '../loginscreen/login_screen.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 
 class SettingsScreen extends StatefulWidget {
 
@@ -39,41 +36,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       profileImage = image;
     });
-  }
-
-  Future<void> pickAndStoreProfileImage() async {
-    final imageBytes = await pickImage();
-    if (imageBytes != null) {
-      await storeImageInFirestore(imageBytes);
-      fetchProfileImage();
-    }
-  }
-
-  Future<Uint8List?> pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final imageBytes = await pickedFile.readAsBytes();
-      return imageBytes;
-    }
-    return null;
-  }
-
-  Future<void> storeImageInFirestore(Uint8List imageBytes) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      log("User not authenticated");
-      return;
-    }
-    try {
-      String base64Image = base64Encode(imageBytes);
-      final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
-      await userDocRef.update({'pic': base64Image});
-      log("Image stored successfully as Base64 string in Firestore.");
-    } catch (e) {
-      log("Error storing image in Firestore: $e");
-    }
   }
 
   Future<Uint8List?> fetchProfileImageFromFirestore() async {
@@ -108,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     List<String> title = [
+      'Edit Profile',
       'Accounts',
       'Privacy',
       'Chats',
@@ -116,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       'Language',
     ];
     List<String> subTitle = [
+      'Name, Profile Pic, Password',
       'Number, email, security',
       'Block contacts, message encryption',
       'Wallpapers, chat history, archived',
@@ -124,6 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       'English (device language)'
     ];
     List<Icon> icons = [
+      const Icon(Icons.edit),
       const Icon(Icons.key),
       const Icon(Icons.lock),
       const Icon(Icons.chat),
@@ -196,29 +161,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
 
                   ),
-                  Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (){
-                          pickAndStoreProfileImage();
-                        },
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )),
                 ],
               ),
             ),
@@ -270,6 +212,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      onTap: (){
+                        if(title[index]=='Edit Profile'){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfileScreen()));
+                        }
+                      },
                       leading: Container(
                         width: 60,
                         height: 60,
