@@ -16,7 +16,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class SettingsScreen extends StatefulWidget {
-
   const SettingsScreen({super.key});
 
   @override
@@ -24,7 +23,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  
   File? _selectedImage;
   Uint8List? profileImage;
 
@@ -68,7 +66,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
     try {
       String base64Image = base64Encode(imageBytes);
-      final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
+      final userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(user.uid);
       await userDocRef.update({'pic': base64Image});
       log("Image stored successfully as Base64 string in Firestore.");
     } catch (e) {
@@ -84,7 +83,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     try {
-      final userDocRef = FirebaseFirestore.instance.collection('user').doc(user.uid);
+      final userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(user.uid);
       final docSnapshot = await userDocRef.get();
 
       if (docSnapshot.exists) {
@@ -101,9 +101,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
     return null;
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,26 +178,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: ClipOval(
                       child: profileImage != null
                           ? Image.memory(
-                        profileImage!,
-                        fit: BoxFit.cover,
-                      )
+                              profileImage!,
+                              fit: BoxFit.cover,
+                            )
                           : Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              shape: BoxShape.circle,
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                  child: Icon(
+                                Icons.person,
+                                size: 25,
+                              )),
                             ),
-                        child: Center(child: Icon(Icons.person,size: 25,)),
-                          ),
                     ),
-
                   ),
                   Positioned(
                       bottom: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           pickAndStoreProfileImage();
                         },
                         child: Container(
