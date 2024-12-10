@@ -73,10 +73,10 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  static Future<void> updateMessageReadstatus(MessageModel message) async {
-    FirebaseFirestore.instance
-        .collection('chats')
-        .doc(message.msg)
-        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+//  message read function
+  static Future<void> updateMessageReadStatus(String messageId) async {
+    await FirebaseFirestore.instance.collection('chats').doc(messageId).update({
+      'read': true,
+    });
   }
 }

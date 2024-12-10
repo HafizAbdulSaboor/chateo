@@ -1,20 +1,14 @@
 import 'dart:developer';
-
 import 'package:chateo/auth/provider/auth_provider.dart';
-import 'package:chateo/helper/my_date_.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
-import 'package:chateo/main.dart';
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class ChatContainer extends StatelessWidget {
   final String chatId; // ID of the current chat
-
   const ChatContainer({super.key, required this.chatId});
-
   @override
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatProvider>(context);
@@ -39,10 +33,6 @@ class ChatContainer extends StatelessWidget {
 
   // Widget for sent messages
   Widget _sendMessage(Size mq, MessageModel message) {
-    if (message.read) {
-      ChatProvider.updateMessageReadstatus(message);
-      log("message read updated");
-    }
     return Padding(
       padding: EdgeInsets.only(right: mq.width * .04),
       child: Column(
@@ -88,12 +78,11 @@ class ChatContainer extends StatelessWidget {
               const SizedBox(
                 width: 3,
               ),
-              if (message.read)
-                const Icon(
-                  Icons.done_all_rounded,
-                  color: Colors.blue,
-                  size: 15,
-                )
+              Icon(
+                message.read ? Icons.done_all : Icons.check,
+                size: 15,
+                color: message.read ? Colors.blue : Colors.grey,
+              )
             ],
           ),
         ],

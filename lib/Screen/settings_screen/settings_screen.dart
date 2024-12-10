@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import '../../apis/auth_apis.dart';
@@ -36,8 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-<<<<<<< HEAD
-=======
   Future<void> pickAndStoreProfileImage() async {
     final imageBytes = await pickImage();
     if (imageBytes != null) {
@@ -74,7 +73,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
->>>>>>> 845a35bec37aa02e60fa3fc686cb2169c1fdcf56
   Future<Uint8List?> fetchProfileImageFromFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -199,8 +197,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                     ),
                   ),
-<<<<<<< HEAD
-=======
                   Positioned(
                       bottom: 0,
                       right: 0,
@@ -224,7 +220,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                       )),
->>>>>>> 845a35bec37aa02e60fa3fc686cb2169c1fdcf56
                 ],
               ),
             ),
@@ -276,9 +271,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      onTap: (){
-                        if(title[index]=='Edit Profile'){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfileScreen()));
+                      onTap: () {
+                        if (title[index] == 'Edit Profile') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfileScreen()));
                         }
                       },
                       leading: Container(

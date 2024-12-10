@@ -199,33 +199,41 @@ class __$$MessageModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MessageModelImpl implements _MessageModel {
   const _$MessageModelImpl(
-      {required this.id,
-      required this.fromId,
-      required this.toId,
-      required this.msg,
-      required this.read,
-      required this.sent,
-      required this.messageType,
-      required this.chatId});
+      {this.id = "",
+      this.fromId = "",
+      this.toId = "",
+      this.msg = "",
+      this.read = false,
+      this.sent = "",
+      this.messageType = "",
+      this.chatId = ""});
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageModelImplFromJson(json);
 
   @override
+  @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final String fromId;
   @override
+  @JsonKey()
   final String toId;
   @override
+  @JsonKey()
   final String msg;
   @override
+  @JsonKey()
   final bool read;
   @override
+  @JsonKey()
   final String sent;
   @override
+  @JsonKey()
   final String messageType;
   @override
+  @JsonKey()
   final String chatId;
 
   @override
@@ -272,14 +280,14 @@ class _$MessageModelImpl implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   const factory _MessageModel(
-      {required final String id,
-      required final String fromId,
-      required final String toId,
-      required final String msg,
-      required final bool read,
-      required final String sent,
-      required final String messageType,
-      required final String chatId}) = _$MessageModelImpl;
+      {final String id,
+      final String fromId,
+      final String toId,
+      final String msg,
+      final bool read,
+      final String sent,
+      final String messageType,
+      final String chatId}) = _$MessageModelImpl;
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
       _$MessageModelImpl.fromJson;

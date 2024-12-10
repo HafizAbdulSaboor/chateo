@@ -7,14 +7,14 @@ enum MessageType { text, image, video }
 @freezed
 class MessageModel with _$MessageModel {
   const factory MessageModel({
-    required String id,
-    required String fromId,
-    required String toId,
-    required String msg,
-    required bool read,
-    required String sent,
-    required String messageType,
-    required String chatId,
+    @Default("") String id,
+    @Default("") String fromId,
+    @Default("") String toId,
+    @Default("") String msg,
+    @Default(false) bool read,
+    @Default("") String sent,
+    @Default("") String messageType,
+    @Default("") String chatId,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>

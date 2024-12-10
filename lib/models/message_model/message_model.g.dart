@@ -8,14 +8,14 @@ part of 'message_model.dart';
 
 _$MessageModelImpl _$$MessageModelImplFromJson(Map<String, dynamic> json) =>
     _$MessageModelImpl(
-      id: json['id'] as String,
-      fromId: json['fromId'] as String,
-      toId: json['toId'] as String,
-      msg: json['msg'] as String,
-      read: json['read'] as bool,
-      sent: json['sent'] as String,
-      messageType: json['messageType'] as String,
-      chatId: json['chatId'] as String,
+      id: json['id'] as String? ?? "",
+      fromId: json['fromId'] as String? ?? "",
+      toId: json['toId'] as String? ?? "",
+      msg: json['msg'] as String? ?? "",
+      read: json['read'] as bool? ?? false,
+      sent: json['sent'] as String? ?? "",
+      messageType: json['messageType'] as String? ?? "",
+      chatId: json['chatId'] as String? ?? "",
     );
 
 Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
