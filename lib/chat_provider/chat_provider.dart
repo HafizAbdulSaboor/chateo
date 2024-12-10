@@ -1,10 +1,7 @@
 import 'dart:developer';
-
 import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,8 +22,7 @@ class ChatProvider extends ChangeNotifier {
         return;
       }
       MessageModel messageModel = message.copyWith(
-        id: DateTime.now().millisecondsSinceEpoch.toString()
-      );
+          id: DateTime.now().millisecondsSinceEpoch.toString());
       final docRef = FirebaseFirestore.instance
           .collection('chats')
           .doc(message.chatId)
@@ -52,28 +48,21 @@ class ChatProvider extends ChangeNotifier {
     final roomId = currentUserId.compareTo(chatId) < 0
         ? "${currentUserId}_$chatId"
         : "${chatId}_$currentUserId";
-
     try {
       final querySnapshot = await _firestore
           .collection('chats')
           .doc(roomId)
           .collection("messages")
           .get();
-
-      _messages = querySnapshot.docs
-          .map((doc) {
+      _messages = querySnapshot.docs.map((doc) {
         var data = doc.data();
         var sent = data['sent'];
-
         // If sent is a Timestamp, convert it to DateTime
         if (sent is Timestamp) {
           sent = sent.toDate(); // Convert Timestamp to DateTime
         }
-
         return MessageModel.fromJson(data);
-      })
-          .toList();
-
+      }).toList();
       // Sort locally after fetching
       _messages.sort((a, b) => a.sent.compareTo(b.sent));
 
@@ -84,9 +73,10 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-
-
-// String generateMessageId() {
-  //   return FirebaseFirestore.instance.collection('messages').doc().id;
-  // }
+  static Future<void> updateMessageReadstatus(MessageModel message) async {
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(message.msg)
+        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
 }
