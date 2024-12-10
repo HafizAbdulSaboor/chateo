@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:chateo/auth/provider/auth_provider.dart';
@@ -164,63 +165,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        // Make the content scrollable
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 18.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipOval(
-                      child: profileImage != null
-                          ? Image.memory(
-                              profileImage!,
-                              fit: BoxFit.cover,
-                            )
-                          : Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                  child: Icon(
-                                Icons.person,
-                                size: 25,
-                              )),
-                            ),
-                    ),
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          pickAndStoreProfileImage();
-                        },
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipOval(
+                  child: profileImage != null
+                      ? Image.memory(
+                          profileImage!,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
                             shape: BoxShape.circle,
                           ),
                           child: const Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                          ),
+                              child: Icon(
+                            Icons.person,
+                            size: 25,
+                          )),
                         ),
-                      )),
-                ],
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -265,9 +237,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
                 child: ListView.builder(
-                  shrinkWrap: true, // Allows ListView to wrap its content
-                  physics:
-                      const NeverScrollableScrollPhysics(), // Prevent scrolling
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
@@ -276,7 +247,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditProfileScreen()));
+                                  builder: (context) =>
+                                      const EditProfileScreen()));
                         }
                       },
                       leading: Container(
