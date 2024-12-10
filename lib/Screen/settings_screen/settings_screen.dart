@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:chateo/auth/provider/auth_provider.dart';
@@ -5,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chateo/utils/colors.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import '../../apis/auth_apis.dart';
@@ -36,45 +38,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-<<<<<<< HEAD
-=======
-  Future<void> pickAndStoreProfileImage() async {
-    final imageBytes = await pickImage();
-    if (imageBytes != null) {
-      await storeImageInFirestore(imageBytes);
-      fetchProfileImage();
-    }
-  }
-
-  Future<Uint8List?> pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final imageBytes = await pickedFile.readAsBytes();
-      return imageBytes;
-    }
-    return null;
-  }
-
-  Future<void> storeImageInFirestore(Uint8List imageBytes) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      log("User not authenticated");
-      return;
-    }
-    try {
-      String base64Image = base64Encode(imageBytes);
-      final userDocRef =
-          FirebaseFirestore.instance.collection('user').doc(user.uid);
-      await userDocRef.update({'pic': base64Image});
-      log("Image stored successfully as Base64 string in Firestore.");
-    } catch (e) {
-      log("Error storing image in Firestore: $e");
-    }
-  }
-
->>>>>>> 845a35bec37aa02e60fa3fc686cb2169c1fdcf56
   Future<Uint8List?> fetchProfileImageFromFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -166,66 +129,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        // Make the content scrollable
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 18.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: ClipOval(
-                      child: profileImage != null
-                          ? Image.memory(
-                              profileImage!,
-                              fit: BoxFit.cover,
-                            )
-                          : Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                  child: Icon(
-                                Icons.person,
-                                size: 25,
-                              )),
-                            ),
-                    ),
-                  ),
-<<<<<<< HEAD
-=======
-                  Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          pickAndStoreProfileImage();
-                        },
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipOval(
+                  child: profileImage != null
+                      ? Image.memory(
+                          profileImage!,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
                             shape: BoxShape.circle,
                           ),
                           child: const Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                          ),
+                              child: Icon(
+                            Icons.person,
+                            size: 25,
+                          )),
                         ),
-                      )),
->>>>>>> 845a35bec37aa02e60fa3fc686cb2169c1fdcf56
-                ],
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -270,15 +201,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
                 child: ListView.builder(
-                  shrinkWrap: true, // Allows ListView to wrap its content
+                  shrinkWrap: true,
                   physics:
-                      const NeverScrollableScrollPhysics(), // Prevent scrolling
+                      const NeverScrollableScrollPhysics(),
                   itemCount: title.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       onTap: (){
                         if(title[index]=='Edit Profile'){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfileScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const EditProfileScreen()));
                         }
                       },
                       leading: Container(

@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../home_screen/home_screen.dart';
+
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
@@ -155,7 +157,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       // Navigate to Settings screen
       if (mounted) {
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (Route<dynamic> route) => false,
+        );
+
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const SettingsScreen()),
         );}
