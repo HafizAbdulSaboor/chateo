@@ -3,6 +3,7 @@ import 'package:chateo/auth/provider/auth_provider.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/models/message_model/message_model.dart';
 import 'package:chateo/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -75,14 +76,51 @@ class ChatContainer extends StatelessWidget {
                   color: AppColors.chattimeColor,
                 ),
               ),
-              const SizedBox(
-                width: 3,
+              const SizedBox(width: 3),
+              StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('chats')
+                    .doc(chatId) // Use the current chat ID
+                    .collection('messages')
+                    .doc(message.id) // Use the message ID
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Icon(
+                      Icons.check,
+                      size: 15,
+                      color: Colors.grey,
+                    );
+                  }
+
+                  if (snapshot.hasError) {
+                    log("Error in StreamBuilder: ${snapshot.error}");
+                    return const Icon(
+                      Icons.check,
+                      size: 15,
+                      color: Colors.grey,
+                    );
+                  }
+
+                  if (snapshot.hasData && snapshot.data?.data() != null) {
+                    final data = snapshot.data!.data() as Map<String, dynamic>;
+                    final isRead = data['read'] ?? false; // Default to false if 'read' is null
+                    return Icon(
+                      isRead ? Icons.done_all : Icons.check,
+                      size: 15,
+                      color: isRead ? Colors.blue : Colors.grey,
+                    );
+                  }
+
+                  // Handle case where the document does not exist or has no data
+                  return const Icon(
+                    Icons.check,
+                    size: 15,
+                    color: Colors.grey,
+                  );
+                },
               ),
-              Icon(
-                message.read ? Icons.done_all : Icons.check,
-                size: 15,
-                color: message.read ? Colors.blue : Colors.grey,
-              )
+
             ],
           ),
         ],

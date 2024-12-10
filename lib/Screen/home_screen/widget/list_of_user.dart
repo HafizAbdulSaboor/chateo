@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:chateo/Screen/chat_screen/chat_Screen.dart';
 import 'package:chateo/apis/auth_apis.dart';
 import 'package:chateo/auth/provider/auth_provider.dart';
+import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/models/user_model/user_model.dart';
 import 'package:chateo/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,40 @@ class ListOfUser extends StatefulWidget {
 }
 
 class _ListOfUserState extends State<ListOfUser> {
+
+  String generateChatId(String userId1, String userId2) {
+    return userId1.compareTo(userId2) < 0
+        ? "${userId1}_$userId2"
+        : "${userId2}_$userId1";
+  }
+  Future<String?> getChatId(String userId1, String userId2) async {
+    // Generate the chatId based on userIds
+    String chatId = generateChatId(userId1, userId2);
+
+    // Query Firestore to check if the chat exists between these users
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId) // Use the generated chatId to query the specific chat
+        .get();
+
+    if (querySnapshot.exists) {
+      // If the chat document exists, return the chatId
+      return chatId;
+    } else {
+      // If no chat document exists, return null or create the chat document
+      return null; // or create the chat document if necessary
+    }
+  }
+  static Future<void> updateMessageReadStatus(String chatId, String messageId) async {
+    await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId) // Ensure chatId is correctly passed or set
+        .collection('messages')
+        .doc(messageId) // Use the document ID of the specific message
+        .update({
+      'read': true, // Update the 'read' field to true
+    });
+  }
   Future<Uint8List?> fetchProfileImageFromFirestore(String userId) async {
     try {
       final userDocRef = FirebaseFirestore.instance.collection('user').doc(userId);
@@ -40,6 +75,7 @@ class _ListOfUserState extends State<ListOfUser> {
 
   @override
   Widget build(BuildContext context) {
+
     final provider = Provider.of<Authpro>(context, listen: false);
 
     return StreamBuilder(
@@ -67,13 +103,31 @@ class _ListOfUserState extends State<ListOfUser> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async{
                       final currentUserId = provider.user.userId;
                       final recipientId = list[index].userId;
+                      final chatId = generateChatId(currentUserId, recipientId);
 
                       if (currentUserId == null || recipientId == null) {
                         log('Error: User ID or recipient ID is null.');
                         return;
+                      }
+
+                      final querySnapshot = await FirebaseFirestore.instance
+                          .collection('chats')
+                          .doc(chatId)
+                          .collection('messages')
+                          .where('fromId', isEqualTo: recipientId)
+                          .where('toId', isEqualTo: currentUserId)
+                          .where('read', isEqualTo: false)
+                          .get();
+
+                      for (var doc in querySnapshot.docs) {
+                        try {
+                          await updateMessageReadStatus(chatId, doc.id);
+                        } catch (e) {
+                          log('Error updating read status: $e');
+                        }
                       }
 
                       Navigator.of(context).push(
