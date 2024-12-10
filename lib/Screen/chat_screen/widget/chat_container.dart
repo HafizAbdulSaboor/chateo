@@ -92,7 +92,7 @@ class ChatContainer extends StatelessWidget {
                 const Icon(
                   Icons.done_all_rounded,
                   color: Colors.blue,
-                  size: 20,
+                  size: 15,
                 )
             ],
           ),
