@@ -20,12 +20,32 @@ class ListOfUser extends StatefulWidget {
 }
 
 class _ListOfUserState extends State<ListOfUser> {
+  Future<Uint8List?> fetchProfileImageFromFirestore(String userId) async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(userId);
+      final docSnapshot = await userDocRef.get();
+
+      if (docSnapshot.exists) {
+        final picBase64 = docSnapshot['pic'] as String?;
+        if (picBase64 != null && picBase64.isNotEmpty) {
+          return base64Decode(picBase64);
+        } else {
+          log("Image data is empty or null for userId: $userId");
+        }
+      }
+    } catch (e) {
+      log("Error fetching image for userId $userId: $e");
+    }
+    return null;
+  }
 
   String generateChatId(String userId1, String userId2) {
     return userId1.compareTo(userId2) < 0
         ? "${userId1}_$userId2"
         : "${userId2}_$userId1";
   }
+
   Future<String?> getChatId(String userId1, String userId2) async {
     // Generate the chatId based on userIds
     String chatId = generateChatId(userId1, userId2);
@@ -44,39 +64,11 @@ class _ListOfUserState extends State<ListOfUser> {
       return null; // or create the chat document if necessary
     }
   }
-  static Future<void> updateMessageReadStatus(String chatId, String messageId) async {
-    await FirebaseFirestore.instance
-        .collection('chats')
-        .doc(chatId) // Ensure chatId is correctly passed or set
-        .collection('messages')
-        .doc(messageId) // Use the document ID of the specific message
-        .update({
-      'read': true, // Update the 'read' field to true
-    });
-  }
-  Future<Uint8List?> fetchProfileImageFromFirestore(String userId) async {
-    try {
-      final userDocRef = FirebaseFirestore.instance.collection('user').doc(userId);
-      final docSnapshot = await userDocRef.get();
-
-      if (docSnapshot.exists) {
-        final picBase64 = docSnapshot['pic'] as String?;
-        if (picBase64 != null && picBase64.isNotEmpty) {
-          return base64Decode(picBase64);
-        } else {
-          log("Image data is empty or null for userId: $userId");
-        }
-      }
-    } catch (e) {
-      log("Error fetching image for userId $userId: $e");
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
-
     final provider = Provider.of<Authpro>(context, listen: false);
+    final pro = Provider.of<ChatProvider>(context, listen: false);
 
     return StreamBuilder(
       stream: Apis.firestore
@@ -103,9 +95,16 @@ class _ListOfUserState extends State<ListOfUser> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       final currentUserId = provider.user.userId;
                       final recipientId = list[index].userId;
+
+                      if (currentUserId == null || recipientId == null) {
+                        log('Error: User ID or recipient ID is null.');
+                        return;
+                      }
+                      // final currentUserId = provider.user.userId;
+                      // final recipientId = list[index].userId;
                       final chatId = generateChatId(currentUserId, recipientId);
 
                       if (currentUserId == null || recipientId == null) {
@@ -124,7 +123,7 @@ class _ListOfUserState extends State<ListOfUser> {
 
                       for (var doc in querySnapshot.docs) {
                         try {
-                          await updateMessageReadStatus(chatId, doc.id);
+                          await pro.updateMessageReadStatus(chatId, doc.id);
                         } catch (e) {
                           log('Error updating read status: $e');
                         }
@@ -149,13 +148,15 @@ class _ListOfUserState extends State<ListOfUser> {
                               width: 3,
                             ),
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(80)),
+                                const BorderRadius.all(Radius.circular(80)),
                             color: AppColors.whiteColor,
                           ),
                           child: FutureBuilder<Uint8List?>(
-                            future: fetchProfileImageFromFirestore(list[index].userId),
+                            future: fetchProfileImageFromFirestore(
+                                list[index].userId),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return Shimmer.fromColors(
                                   baseColor: Colors.grey.shade300,
                                   highlightColor: Colors.grey.shade100,
@@ -186,7 +187,8 @@ class _ListOfUserState extends State<ListOfUser> {
                                       shape: BoxShape.circle,
                                     ),
                                     child: Icon(
-                                      Icons.person, // Use a placeholder icon instead of an image
+                                      Icons
+                                          .person, // Use a placeholder icon instead of an image
                                       color: Colors.grey.shade700,
                                       size: 30, // Adjust icon size
                                     ),
@@ -195,7 +197,6 @@ class _ListOfUserState extends State<ListOfUser> {
                               }
                             },
                           ),
-
                         ),
                         const SizedBox(width: 15),
                         Expanded(
@@ -204,7 +205,7 @@ class _ListOfUserState extends State<ListOfUser> {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     list[index].fullname,

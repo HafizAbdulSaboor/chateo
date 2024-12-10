@@ -7,16 +7,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ChatContainer extends StatelessWidget {
+class ChatContainer extends StatefulWidget {
   final String chatId; // ID of the current chat
   const ChatContainer({super.key, required this.chatId});
+
+  @override
+  State<ChatContainer> createState() => _ChatContainerState();
+}
+
+class _ChatContainerState extends State<ChatContainer> {
   @override
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatProvider>(context);
     final messages = chatProvider.messages;
     final authProvider = Provider.of<Authpro>(context);
 
-    chatProvider.fetchMessages(chatId, context);
+    chatProvider.fetchMessages(widget.chatId, context);
 
     return messages.isEmpty
         ? const Center(child: Text('No messages yet'))
@@ -77,50 +83,17 @@ class ChatContainer extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 3),
-              StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('chats')
-                    .doc(chatId) // Use the current chat ID
-                    .collection('messages')
-                    .doc(message.id) // Use the message ID
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Icon(
-                      Icons.check,
-                      size: 15,
-                      color: Colors.grey,
-                    );
-                  }
-
-                  if (snapshot.hasError) {
-                    log("Error in StreamBuilder: ${snapshot.error}");
-                    return const Icon(
-                      Icons.check,
-                      size: 15,
-                      color: Colors.grey,
-                    );
-                  }
-
-                  if (snapshot.hasData && snapshot.data?.data() != null) {
-                    final data = snapshot.data!.data() as Map<String, dynamic>;
-                    final isRead = data['read'] ?? false; // Default to false if 'read' is null
-                    return Icon(
-                      isRead ? Icons.done_all : Icons.check,
-                      size: 15,
-                      color: isRead ? Colors.blue : Colors.grey,
-                    );
-                  }
-
-                  // Handle case where the document does not exist or has no data
-                  return const Icon(
-                    Icons.check,
+              Consumer<ChatProvider>(
+                builder: (context, chatProvider, child) {
+                  final isRead =
+                      chatProvider.messageReadStatus[message.id] ?? false;
+                  return Icon(
+                    isRead ? Icons.done_all : Icons.check,
                     size: 15,
-                    color: Colors.grey,
+                    color: isRead ? Colors.blue : Colors.grey,
                   );
                 },
               ),
-
             ],
           ),
         ],

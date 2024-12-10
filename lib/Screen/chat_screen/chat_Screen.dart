@@ -30,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> fetchUserImage() async {
     try {
       final userDocRef =
-      FirebaseFirestore.instance.collection('user').doc(widget.user.userId);
+          FirebaseFirestore.instance.collection('user').doc(widget.user.userId);
       final docSnapshot = await userDocRef.get();
 
       if (docSnapshot.exists) {
@@ -69,25 +69,25 @@ class _ChatScreenState extends State<ChatScreen> {
                   maxRadius: 20,
                   child: profileImage != null
                       ? ClipOval(
-                    child: Image.memory(
-                      profileImage!,
-                      fit: BoxFit.cover,
-                      width: 40,
-                      height: 40,
-                    ),
-                  )
+                          child: Image.memory(
+                            profileImage!,
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                          ),
+                        )
                       : Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      width: 40, // Adjust size as needed
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            width: 40, // Adjust size as needed
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
                 ),
 
                 Positioned(
@@ -132,8 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (BuildContext context) {
                   return <PopupMenuEntry>[
                     const PopupMenuItem(child: Text('View contact')),
-                    const PopupMenuItem(
-                        child: Text('Media, link and docs')),
+                    const PopupMenuItem(child: Text('Media, link and docs')),
                     const PopupMenuItem(child: Text('Search')),
                     const PopupMenuItem(child: Text('Mute notifications')),
                     const PopupMenuItem(child: Text('Wallpaper')),
@@ -151,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ChatContainer(chatId:  widget.user.userId),
+            child: ChatContainer(chatId: widget.user.userId),
           ),
           ChatTextForm(chatId: widget.user.userId),
         ],
