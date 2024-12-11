@@ -4,6 +4,7 @@ import 'package:chateo/Screen/siginscreen/provider/signup_provider.dart';
 import 'package:chateo/Screen/splach/splach_Screen.dart';
 import 'package:chateo/chat_provider/chat_provider.dart';
 import 'package:chateo/provider/bool_provider.dart';
+import 'package:chateo/services/message_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ import 'auth/provider/auth_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  MessagingServices.getToken();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
